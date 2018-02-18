@@ -1,0 +1,20 @@
+# Dictionary of Russian romaji IME
+
+---
+name: roma_kr
+version: "0.1"
+sort: by_weight
+use_preset_vocabulary: false
+...
+
+깍	kkag	0
+깎	kkagg	0
+까	kka	0
+까	gga	0
+가	ka	0
+가	ga	0
+아	a	0
+악	ak	0
+악	ag	0
+앆	agg	0
+앆	akk	0
