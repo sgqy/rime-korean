@@ -1,5 +1,9 @@
 
+#include <vector>
+#include <string>
+
 #include "cb_table.hpp"
+#include "pc_table.hpp"
 #include "utils.hpp"
 
 enum jamo_pref : uint16_t {
@@ -36,6 +40,21 @@ jamo get_jamo(uint16_t syl)
 	return jm;
 }
 
+void decom_jamo(const uint16_t R, uint16_t *a, uint16_t *b)
+{
+	for(cb_t *p = (cb_t *)cb_tbl; p->r; ++p) {
+		if(R == p->r) {
+			if(a) {
+				*a = p->a;
+			}
+			if(b) {
+				*b = p->b;
+			}
+			break;
+		}
+	}
+}
+
 std::vector<uint16_t> get_alpha_seq(uint16_t syl)
 {
 	return get_alpha_seq(get_jamo(syl));
@@ -51,23 +70,11 @@ std::vector<uint16_t> get_alpha_seq(jamo jm)
 	seq[8] = jm.end;
 
 	for(int i = 0; i < 12; i += 4) {
-		for(cb_t *p = (cb_t *)cb_tbl; p->r; ++p) {
-			if(seq[i] == p->r) {
-				seq[i+0] = p->a;
-				seq[i+2] = p->b;
-				break;
-			}
-		}
+		decom_jamo(seq[i], seq+i, seq+i+2);
 	}
 
 	for(int i = 0; i < 12; i += 2) {
-		for(cb_t *p = (cb_t *)cb_tbl; p->r; ++p) {
-			if(seq[i] == p->r) {
-				seq[i+0] = p->a;
-				seq[i+1] = p->b;
-				break;
-			}
-		}
+		decom_jamo(seq[i], seq+i, seq+i+1);
 	}
 
 	for(int i = 0; i < 12; ++i) {
@@ -77,4 +84,9 @@ std::vector<uint16_t> get_alpha_seq(jamo jm)
 	}
 
 	return ret;
+}
+
+std::string get_roma(std::vector<uint16_t> line)
+{
+	return "";
 }

@@ -3,6 +3,7 @@
 
 #include <cstdint>
 #include <vector>
+#include <string>
 
 struct jamo {
 	uint16_t beg;
