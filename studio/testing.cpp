@@ -5,6 +5,9 @@
 
 int main()
 {
+	printf("ph_t %d ch_t %d\n", sizeof(ph_t), sizeof(ch_t));
+	return 0;
+
 	uint16_t bom = 0xfeff;
 	uint16_t tip[] = {' ', ':', ' '};
 	uint16_t das[] = {' ', '-', ' '};

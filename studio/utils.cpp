@@ -86,7 +86,15 @@ std::vector<uint16_t> get_alpha_seq(jamo jm)
 	return ret;
 }
 
-std::string get_roma(std::vector<uint16_t> line)
+std::set<std::string> get_roma(uint16_t syl)
 {
-	return "";
+	std::vector<uint16_t> arg;
+	arg.push_back(syl);
+	return get_roma(arg);
+}
+
+std::set<std::string> get_roma(std::vector<uint16_t> line)
+{
+	std::set<std::string> ret;
+	return ret;
 }
