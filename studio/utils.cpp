@@ -86,6 +86,18 @@ std::vector<uint16_t> get_alpha_seq(jamo jm)
 	return ret;
 }
 
+std::string get_roma_single(const uint16_t jm)
+{
+	std::string ret;
+	for(ph_t *p = (ph_t *)ph_tbl; p->syl(); ++p) {
+		if(jm == p->syl()) {
+			ret += p->pho();
+			break;
+		}
+	}
+	return ret;
+}
+
 std::set<std::string> get_roma(uint16_t syl)
 {
 	std::vector<uint16_t> arg;
@@ -93,8 +105,26 @@ std::set<std::string> get_roma(uint16_t syl)
 	return get_roma(arg);
 }
 
+std::set<std::string> get_roma(std::u16string line)
+{
+	std::vector<uint16_t> lv(line.begin(), line.end());
+	return get_roma(lv);
+}
+
 std::set<std::string> get_roma(std::vector<uint16_t> line)
 {
 	std::set<std::string> ret;
+
+	// Method 1: Convert directly
+	std::string tmp;
+	for(auto i = line.begin(); i != line.end(); ++i) {
+		auto seq = get_alpha_seq(*i);
+		for(auto j = seq.begin(); j != seq.end(); ++j) {
+			tmp += get_roma_single(*j);
+		}
+	}
+	ret.insert(tmp);
+	tmp.clear();
+
 	return ret;
 }

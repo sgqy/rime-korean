@@ -5,22 +5,22 @@
 
 #include <vector>
 
-struct ph_t {
+class ph_t {
 	uintptr_t _syl;
 	uintptr_t _pho;
+public:
 	uint16_t syl() {
 		return (uint16_t)_syl;
 	}
-	std::vector<char *> pho() {
-		std::vector<char *> ret;
-		ret.push_back((char *)_pho);
-		return ret;
+	char *pho() {
+		return (char *)_pho;
 	}
 };
 
-struct ch_t {
+class ch_t {
 	uintptr_t _end;
 	uintptr_t _beg;
+public:
 	uint16_t end() {
 		return (uint16_t)_end;
 	}
@@ -71,7 +71,7 @@ static const uintptr_t ph_tbl[] = {
 	0x1108, (uintptr_t)"pp",  // ᄈ
 	0x1109, (uintptr_t)"s",   // ᄉ
 	0x110a, (uintptr_t)"ss",  // ᄊ
-	0x110b, (uintptr_t)"-",   // ᄋ
+	0x110b, (uintptr_t)"",    // ᄋ
 	0x110c, (uintptr_t)"j",   // ᄌ
 	0x110d, (uintptr_t)"jj",  // ᄍ
 	0x110e, (uintptr_t)"ch",  // ᄎ
@@ -204,7 +204,7 @@ static const uintptr_t pc_tbl[] = {
 //	0x11ba, 0x110e, (uintptr_t)"tch", 0,
 //	0x11ba, 0x110f, (uintptr_t)"tk", 0,
 //	0x11ba, 0x1110, (uintptr_t)"tt", 0,
-/	0x11ba, 0x1111, (uintptr_t)"tp", 0,
+//	0x11ba, 0x1111, (uintptr_t)"tp", 0,
 	0x11ba, 0x1112, (uintptr_t)"th", (uintptr_t)"t", (uintptr_t)"ch", 0,
 	// ᆼ
 //	0x11bc, 0x110b, (uintptr_t)"ng", 0,
