@@ -9,6 +9,13 @@ class ph_t
 {
 	uintptr_t _syl;
 	uintptr_t _pho;
+private:
+	ph_t() = delete;
+	~ph_t() = delete;
+	void *operator new (size_t) = delete;
+	void *operator new (size_t, void *) = delete;
+	void *operator new[] (size_t) = delete;
+	void *operator new[] (size_t, void *) = delete;
 public:
 	uint16_t jamo()
 	{
@@ -24,6 +31,13 @@ class ch_t
 {
 	uintptr_t _end;
 	uintptr_t _beg;
+private:
+	ch_t() = delete;
+	~ch_t() = delete;
+	void *operator new (size_t) = delete;
+	void *operator new (size_t, void *) = delete;
+	void *operator new[] (size_t) = delete;
+	void *operator new[] (size_t, void *) = delete;
 public:
 	uint16_t end()
 	{
@@ -33,12 +47,12 @@ public:
 	{
 		return (uint16_t) _beg;
 	}
-	std::vector<char *> pho()
+	std::vector<std::string> pho()
 	{
-		std::vector<char *> ret;
+		std::vector<std::string> ret;
 
-		for (char *p = (char *) (&_beg + 1); p; ++p) {
-			ret.push_back (p);
+		for (uintptr_t *p = &_beg + 1; *p; ++p) {
+			ret.push_back ( (const char *) (*p));
 		}
 
 		return ret;

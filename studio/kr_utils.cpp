@@ -5,6 +5,7 @@
 #include "cb_table.hpp"
 #include "kr_utils.hpp"
 #include "pc_table.hpp"
+#include "str_utils.hpp"
 
 enum korean_property : uint16_t {
 	syl_base = 0xAC00,
@@ -131,6 +132,26 @@ static std::string get_syllable_roma (const uint16_t syl)
 	return ret;
 }
 
+static std::vector<std::string> get_phonetic_link (const uint16_t end, const uint16_t beg)
+{
+	for (ch_t *p = (ch_t *) pc_tbl; p->end(); ++p) {
+		if (end == p->end() && beg == p->beg()) {
+			return p->pho();
+		}
+
+		uintptr_t *j = (uintptr_t *) p;
+		j += p->pho().size() + 1;
+		p = (ch_t *) j;
+	}
+
+	std::string s;
+	s += get_jamo_roma (end);
+	s += get_jamo_roma (beg);
+	std::vector<std::string> ret;
+	ret.push_back (s);
+	return ret;
+}
+
 std::set<std::string> get_word_roma (uint16_t syl)
 {
 	std::vector<uint16_t> arg;
@@ -147,9 +168,9 @@ std::set<std::string> get_word_roma (std::u16string line)
 std::set<std::string> get_word_roma (std::vector<uint16_t> line)
 {
 	std::set<std::string> ret;
-
-	// Type 1: Convert directly, with separated alphabets
 	std::string tmp;
+
+	//// Type 1: Convert directly, with separated alphabets
 
 	for (auto i = line.begin(); i != line.end(); ++i) {
 		auto seq = get_jamo_sequence (*i);
@@ -162,13 +183,55 @@ std::set<std::string> get_word_roma (std::vector<uint16_t> line)
 	ret.insert (tmp);
 	tmp.clear();
 
-	// Type 2: Convert directly, with combined vowels
+	//// Type 2: Convert directly, with combined vowels
+
 	for (auto i = line.begin(); i != line.end(); ++i) {
 		tmp += get_syllable_roma (*i);
 	}
 
 	ret.insert (tmp);
 	tmp.clear();
+
+	//// Type 3: Include phonetic changes
+
+	// expand syllables in line
+	std::vector<syllable> sv;
+
+	for (auto i = line.begin(); i != line.end(); ++i) {
+		sv.push_back (expand_syllable (*i));
+	}
+
+	// get all possible roma sequence of syllables
+	std::vector<std::vector<std::string>> seq;
+
+	for (size_t i = 0; i < sv.size(); ++i) {
+		if (i == 0) {
+			std::vector<std::string> jrv;
+			jrv.push_back (get_jamo_roma (sv[i].beg));
+			seq.push_back (jrv);
+		}
+
+		std::vector<std::string> jrv;
+		jrv.push_back (get_jamo_roma (sv[i].mid));
+		seq.push_back (jrv);
+
+		if (i == sv.size() - 1) {
+			std::vector<std::string> jrv;
+			jrv.push_back (get_jamo_roma (sv[i].end));
+			seq.push_back (jrv);
+		} else {
+			auto jrv = get_phonetic_link (sv[i].end, sv[i + 1].beg);
+			seq.push_back (jrv);
+		}
+	}
+
+	// do Cartesion product
+	auto pro = str_product (seq);
+
+	// save result
+	for (auto& s : pro) {
+		ret.insert (s);
+	}
 
 	return ret;
 }

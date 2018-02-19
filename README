@@ -1,10 +1,16 @@
 
+This input method for RIME is made for my friend, who is a language teacher, speaks a lot of languages.
+
+You can contact me using Chinese/Japanese/English.
+Sorry that I cannot understand Korean without kr-ja Google Translation.
+
+-------------------------
 Reference:
 
 30k-hanja list : Choe Hwanjin / https://github.com/choehwanjin/libhangul
 36k-words list : https://github.com/acidsound/korean_wordlist
 romanize rules : https://en.wikipedia.org/wiki/Revised_Romanization_of_Korean
-core code used : https://github.com/choehwanjin/libhangul
+util code used : https://github.com/choehwanjin/libhangul
 
 Based on RIME  : https://github.com/rime
 
