@@ -1,4 +1,6 @@
 #include <algorithm>
+#include <locale>
+#include <codecvt>
 #include "str_utils.hpp"
 
 std::vector<uint16_t> u8_to_u16_vec (const char *s)
@@ -24,19 +26,17 @@ std::u16string u8_to_u16_str (std::string s)
 }
 
 // indexer for indefinite loop
-struct product_property {
+struct loop_property {
 	std::vector<int> _len;
 	std::vector<int> idx;
 	bool valid = false;
 	void add()
 	{
 		bool inc = true;
-
 		for (int j = idx.size() - 1; j >= 0; --j) {
 			if (inc) {
 				++idx[j];
 			}
-
 			if (idx[j] == _len[j]) {
 				idx[j] = 0;
 				inc = true;
@@ -44,13 +44,10 @@ struct product_property {
 				inc = false;
 			}
 		}
-
 		int sum = 0;
-
-		for (auto& j : idx) {
+		for (auto &j : idx) {
 			sum += j;
 		}
-
 		if (sum == 0) {
 			valid = false;
 		}
@@ -61,7 +58,6 @@ struct product_property {
 			_len.push_back (j->size());
 			idx.push_back (0);
 		}
-
 		valid = true;
 	}
 };
@@ -69,17 +65,13 @@ struct product_property {
 std::vector<std::string> str_product (std::vector<std::vector<std::string>> c)
 {
 	std::vector<std::string> ret;
-	product_property p;
-
+	loop_property p;
 	for (p.init (c); p.valid; p.add()) {
 		std::string tmp;
-
-		for (int i = 0; i < c.size(); ++i) {
+		for (size_t i = 0; i < c.size(); ++i) {
 			tmp += c[i][p.idx[i]];
 		}
-
 		ret.push_back (tmp);
 	}
-
 	return ret;
 }

@@ -1,9 +1,6 @@
-
-#ifndef STR_UTILS_HPP_
+#ifndef __STR_UTILS_HPP__
 #define __STR_UTILS_HPP__
 
-#include <locale>
-#include <codecvt>
 #include <cstdint>
 #include <vector>
 #include <string>
@@ -14,4 +11,4 @@ std::u16string u8_to_u16_str (const char *s);
 std::u16string u8_to_u16_str (std::string s);
 std::vector<std::string> str_product (std::vector<std::vector<std::string>> c);
 
-#endif /* STR_UTILS_HPP_ */
+#endif /* __STR_UTILS_HPP__ */
